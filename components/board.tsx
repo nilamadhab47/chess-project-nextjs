@@ -6,6 +6,7 @@ import { p0, pw, pb, chess, getBoard } from "@/utils/chess-utils"
 import { calculateBestMove, initGame } from "chess-ai";
 
 export default function Board() {
+    const [dataRes, setDataRes] = useState()
     const [pieces, setPieces] = useState(new Array(8).fill(0).map(() => new Array(8).fill("")))
     useEffect(() => {
         initGame(chess, 1)
@@ -13,7 +14,23 @@ export default function Board() {
     }, [])
     const [highlighted, setHighlighted] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState()
+    useEffect(() => {
+        fetch('https://testapi-azure.vercel.app/api/hello')
+            .then(response => response.json())
+            .then(data => {
+                setDataRes(data) // set the response in setData
+            })
+    }, [])
+
+    console.log(dataRes)
     return (
+        <>
+
+        <div>
+            {dataRes && JSON.stringify(dataRes)}
+        </div>
+        
+        
         <div className={styles.board}>
             {
                 // eslint-disable-next-line react/jsx-key
@@ -63,5 +80,7 @@ export default function Board() {
                 </div>)
             }
         </div>
+        </>
+
     )
 }
